@@ -74,6 +74,7 @@ export function setSelectedCity(city) {
     } else {
       dispatch(setTo(city));
     }
+    dispatch(hideCitySelector());
   };
 }
 
@@ -103,5 +104,38 @@ export function setDepartDate(date) {
   return {
     type: ACTION_SET_DEPART_DATE,
     payload: date,
+  };
+}
+
+export function fetchCityData() {
+  return (dispatch, getState) => {
+    const { isloadingCityData } = getState();
+    if (isloadingCityData) {
+      return;
+    }
+
+    const cache = JSON.parse(localStorage.getItem('city_data_cache') || '{}');
+    if (Date.now() < cache.expires) {
+      dispatch(setCityData(cache.data));
+      return;
+    }
+
+    dispatch(setIsloadingCityData(true));
+
+    fetch('/rest/cities?_' + Date.now())
+      .then(res => res.json())
+      .then(cityData => {
+        dispatch(setCityData(cityData));
+        dispatch(setIsloadingCityData(false));
+
+        localStorage.setItem('city_data_cache', JSON.stringify({
+          expires: Date.now() + 60 * 1000,
+          data: cityData,
+        }));
+      })
+      .catch(err => {
+        dispatch(setIsloadingCityData(false));
+        console.log(err);
+      });
   };
 }
