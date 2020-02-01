@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { memo } from 'react';
 import './Submit.css';
 
-function Submit() {
-  return (
-    <div>
-
-    </div>
-  );
-}
-
-export default Submit;
+export default memo(function Submit() {
+    return (
+        <div className="submit">
+            <button type="submit" className="submit-button">
+                {' '}
+                搜索
+                {' '}
+            </button>
+        </div>
+    );
+});

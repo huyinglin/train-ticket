@@ -36,12 +36,12 @@ export function setCityData(cityData) {
   };
 }
 
-export function toggleHightSpeed() {
+export function toggleHighSpeed() {
   return (dispatch, getState) => {
-    const { hightSpeed } = getState();
+    const { highSpeed } = getState();
     dispatch({
       type: ACTION_SET_HIGH_SPEED,
-      payload: !hightSpeed,
+      payload: !highSpeed,
     });
   };
 }
